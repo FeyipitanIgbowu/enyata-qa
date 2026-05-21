@@ -1,7 +1,7 @@
 import ProductsPage from '../pages/ProductsPage';
 import CartPage from '../pages/CartPage';
 
-describe('Add and Remove Products from Cart - Standard User', () => {
+describe('Add and Remove Products from Cart (Standard User)', () => {
 
   beforeEach(() => {
     cy.loginAs('standard_user');
