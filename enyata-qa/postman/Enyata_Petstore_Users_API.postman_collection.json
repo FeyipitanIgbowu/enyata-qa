@@ -1,0 +1,373 @@
+{
+  "info": {
+    "name": "Petstore Users API - Enyata QA Assessment",
+    "description": "API tests for the Petstore /user endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://petstore.swagger.io/v2",
+      "type": "string"
+    },
+    {
+      "key": "username",
+      "value": "feyipitan_test",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Create User",
+      "item": [
+        {
+          "name": "POST /user - Create user successfully",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response has type and message', function() {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.have.property('type');",
+                  "  pm.expect(json).to.have.property('message');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/user",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1001,\n  \"username\": \"feyipitan_test\",\n  \"firstName\": \"Feyipitan\",\n  \"lastName\": \"Igbowu\",\n  \"email\": \"feyipitan.test@gmail.com\",\n  \"password\": \"Test@1234\",\n  \"phone\": \"09053293671\",\n  \"userStatus\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /user - Create user with missing required fields",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 400', function() {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([200, 400]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/user",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"\",\n  \"email\": \"\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /user/createWithArray - Create users with array",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/user/createWithArray",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"id\": 1002,\n    \"username\": \"testuser_array1\",\n    \"firstName\": \"Test\",\n    \"lastName\": \"One\",\n    \"email\": \"test1@gmail.com\",\n    \"password\": \"Test@1234\",\n    \"phone\": \"08012345678\",\n    \"userStatus\": 1\n  },\n  {\n    \"id\": 1003,\n    \"username\": \"testuser_array2\",\n    \"firstName\": \"Test\",\n    \"lastName\": \"Two\",\n    \"email\": \"test2@gmail.com\",\n    \"password\": \"Test@1234\",\n    \"phone\": \"08087654321\",\n    \"userStatus\": 1\n  }\n]"
+            }
+          }
+        },
+        {
+          "name": "POST /user/createWithList - Create users with list",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/user/createWithList",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"id\": 1004,\n    \"username\": \"testuser_list1\",\n    \"firstName\": \"List\",\n    \"lastName\": \"User\",\n    \"email\": \"listuser@gmail.com\",\n    \"password\": \"Test@1234\",\n    \"phone\": \"08011111111\",\n    \"userStatus\": 1\n  }\n]"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Get User",
+      "item": [
+        {
+          "name": "GET /user/{username} - Get existing user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response contains correct username', function() {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json.username).to.equal('feyipitan_test');",
+                  "});",
+                  "pm.test('Response has required fields', function() {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.have.property('id');",
+                  "  pm.expect(json).to.have.property('email');",
+                  "  pm.expect(json).to.have.property('firstName');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/user/{{username}}"
+          }
+        },
+        {
+          "name": "GET /user/{username} - Get non-existent user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 404', function() {",
+                  "  pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test('Error message returned', function() {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json.message).to.equal('User not found');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/user/nonexistentuser99999"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Update User",
+      "item": [
+        {
+          "name": "PUT /user/{username} - Update user successfully",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response has message', function() {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.have.property('message');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/user/{{username}}",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1001,\n  \"username\": \"feyipitan_test\",\n  \"firstName\": \"Feyipitan Updated\",\n  \"lastName\": \"Igbowu\",\n  \"email\": \"feyipitan.updated@gmail.com\",\n  \"password\": \"NewTest@1234\",\n  \"phone\": \"09053293671\",\n  \"userStatus\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "PUT /user/{username} - Update non-existent user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 404', function() {",
+                  "  pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/user/nonexistentuser99999",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"nonexistentuser99999\",\n  \"firstName\": \"Ghost\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Login & Logout",
+      "item": [
+        {
+          "name": "GET /user/login - Login with valid credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response contains session token', function() {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json.message).to.include('logged in user session');",
+                  "});",
+                  "pm.test('X-Rate-Limit header is present', function() {",
+                  "  pm.expect(pm.response.headers.get('X-Rate-Limit')).to.not.be.null;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/user/login?username=feyipitan_test&password=Test@1234",
+              "query": [
+                {"key": "username", "value": "feyipitan_test"},
+                {"key": "password", "value": "Test@1234"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /user/login - Login with invalid credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function() {",
+                  "  pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/user/login?username=wronguser&password=wrongpass",
+              "query": [
+                {"key": "username", "value": "wronguser"},
+                {"key": "password", "value": "wrongpass"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /user/logout - Logout successfully",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response confirms logout', function() {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.have.property('message');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/user/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Delete User",
+      "item": [
+        {
+          "name": "DELETE /user/{username} - Delete existing user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response confirms deletion', function() {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.have.property('message');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/user/{{username}}"
+          }
+        },
+        {
+          "name": "DELETE /user/{username} - Delete non-existent user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 404', function() {",
+                  "  pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/user/nonexistentuser99999"
+          }
+        }
+      ]
+    }
+  ]
+}
