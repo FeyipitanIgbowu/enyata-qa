@@ -54,9 +54,9 @@ describe('Checkout Problem User (Known Issues)', () => {
     CartPage.proceedToCheckout();
   });
 
-  it('BUG: Problem user cannot complete checkout — First Name field broken', () => {
+  it('BUG: Problem user cannot complete checkout (Last Name field broken)', () => {
     CheckoutPage.fillCheckoutInfo('Feyipitan', 'Igbowu', '100001');
-    CheckoutPage.getErrorMessage().should('contain', 'First Name is required');
+    CheckoutPage.getErrorMessage().should('contain', 'Last Name is required');
   });
 
 });
